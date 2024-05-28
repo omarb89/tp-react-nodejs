@@ -1,4 +1,5 @@
 // app.js
+import Bar from ('Bars.mjs')
 const express = require('express');
 const { sequelize, Bar, Biere, Commande, BiereCommande } = require('./models');
 

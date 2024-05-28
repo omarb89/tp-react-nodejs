@@ -1,5 +1,6 @@
 const express = require('express');
-const { sequelize, Bar, Biere, Commande, BiereCommande } = require('./models');
+const barSchema = require('./models/Bars');
+const biereSchema = require('./models/Bieres');
 
 const app = express();
 app.use(express.json());
@@ -12,7 +13,7 @@ app.get('/', (req, res) => {
 // Routes pour Bar
 app.get('/bars', async (req, res) => {
   try {
-    const bars = await Bar.findAll();
+    const bars = await barSchema.findAll();
     res.json(bars);
   } catch (error) {
     res.status(500).send(error.message);
@@ -21,7 +22,7 @@ app.get('/bars', async (req, res) => {
 
 app.post('/bars', async (req, res) => {
   try {
-    const bar = await Bar.create(req.body);
+    const bar = await barSchema.create(req.body);
     res.json(bar);
   } catch (error) {
     res.status(500).send(error.message);
@@ -30,7 +31,7 @@ app.post('/bars', async (req, res) => {
 
 app.get('/bars/:id', async (req, res) => {
   try {
-    const bar = await Bar.findByPk(req.params.id, {
+    const bar = await barSchema.findByPk(req.params.id, {
       include: [Biere, Commande]
     });
     if (bar) {
@@ -45,7 +46,7 @@ app.get('/bars/:id', async (req, res) => {
 
 app.delete('/bars/:id', async (req, res) => {
   try {
-    const rowsDeleted = await Bar.destroy({ where: { id: req.params.id } });
+    const rowsDeleted = await barSchema.destroy({ where: { id: req.params.id } });
     if (rowsDeleted) {
       res.status(204).send();
     } else {
@@ -59,7 +60,7 @@ app.delete('/bars/:id', async (req, res) => {
 // Routes pour Biere
 app.get('/bieres', async (req, res) => {
   try {
-    const bieres = await Biere.findAll();
+    const bieres = await biereSchema.findAll();
     res.json(bieres);
   } catch (error) {
     res.status(500).send(error.message);
@@ -68,7 +69,7 @@ app.get('/bieres', async (req, res) => {
 
 app.post('/bieres', async (req, res) => {
   try {
-    const biere = await Biere.create(req.body);
+    const biere = await biereSchema.create(req.body);
     res.json(biere);
   } catch (error) {
     res.status(500).send(error.message);
