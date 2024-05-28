@@ -1,5 +1,5 @@
 const express = require('express');
-const barSchema = require('./models/Bars');
+const barSchema = require('./models/bars.js');
 const biereSchema = require('./models/Bieres');
 
 const app = express();
@@ -14,7 +14,7 @@ app.get('/', (req, res) => {
 app.get('/bars', async (req, res) => {
   try {
     const bars = await barSchema.findAll();
-    res.json(bars);
+    res.json(bar);
   } catch (error) {
     res.status(500).send(error.message);
   }
@@ -105,6 +105,25 @@ app.post('/commandes/:commandeId/bieres', async (req, res) => {
     res.status(500).send(error.message);
   }
 });
+// Routes pour Biere commande
+app.get('/bieresCommande', async (req, res) => {
+  try {
+    const bieres = await biereCommandeSchema.findAll();
+    res.json(bieres);
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
+});
+
+app.post('/bieresCommande', async (req, res) => {
+  try {
+    const biere = await bCSchema.create(req.body);
+    res.json(biere);
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
+});
+
 
 // Démarrer le serveur
 const PORT = process.env.PORT || 3000;

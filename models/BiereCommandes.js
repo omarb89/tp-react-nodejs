@@ -1,20 +1,12 @@
-module.exports = (sequelize, DataTypes) => {
-    const BiereCommande = sequelize.define('BiereCommande', {
-      biereId: {
-        type: DataTypes.INTEGER,
-        references: {
-          model: 'Bieres',
-          key: 'id'
-        }
-      },
-      commandeId: {
-        type: DataTypes.INTEGER,
-        references: {
-          model: 'Commandes',
-          key: 'id'
-        }
-      }
-    });
-    return BiereCommande;
-  };
-  
+const db = require('../config/database');
+const sequelize = require('sequelize');
+
+const bCSchema = db.define('biereCommande', {
+  name: { type: sequelize.STRING },
+  status: { type: sequelize.STRING, },
+  Date: { type: sequelize.DATE},
+  prix: { type: sequelize.FLOAT, min:(0) },
+  bar_id: { type: sequelize.INTEGER,  },
+});
+
+module.exports = bCSchema

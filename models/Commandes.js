@@ -1,17 +1,9 @@
-module.exports = (sequelize, DataTypes) => {
-    const Commande = sequelize.define('Commande', {
-      date: {
-        type: DataTypes.DATE,
-        allowNull: false
-      },
-      barId: {
-        type: DataTypes.INTEGER,
-        references: {
-          model: 'Bars',
-          key: 'id'
-        }
-      }
-    });
-    return Commande;
-  };
-  
+const db = require('../config/database');
+const sequelize = require('sequelize');
+
+const barSchema = db.define('bar', {
+  biere_id: { type: sequelize.INTEGER,  },
+  commande_id: { type: sequelize.INTEGER },
+});
+
+module.exports = barSchema
