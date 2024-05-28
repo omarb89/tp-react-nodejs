@@ -2,7 +2,7 @@ const express = require('express');
 const barSchema = require('./models/bars.js');
 const biereSchema = require('./models/Bieres');
 const commandeSchema = require('./models/Commandes.js');
-const biereCSchema = require ('./models/BiereCommandes.js')
+const biereCSchema = require('./models/BiereCommandes.js');
 
 const app = express();
 app.use(express.json());
@@ -16,7 +16,7 @@ app.get('/', (req, res) => {
 app.get('/bars', async (req, res) => {
   try {
     const bars = await barSchema.findAll();
-    res.json(bar);
+    res.json(bars);
   } catch (error) {
     res.status(500).send(error.message);
   }
@@ -34,7 +34,7 @@ app.post('/bars', async (req, res) => {
 app.get('/bars/:id', async (req, res) => {
   try {
     const bar = await barSchema.findByPk(req.params.id, {
-      include: [Biere, Commande]
+      include: [biereSchema, commandeSchema]
     });
     if (bar) {
       res.json(bar);
@@ -101,17 +101,18 @@ app.post('/commandes/:commandeId/bieres', async (req, res) => {
   try {
     const { commandeId } = req.params;
     const { biereId } = req.body;
-    const biereCommande = await BiereCommande.create({ commandeId, biereId });
+    const biereCommande = await biereCSchema.create({ commandeId, biereId });
     res.json(biereCommande);
   } catch (error) {
     res.status(500).send(error.message);
   }
 });
-// Routes pour Biere commande
+
+// Routes pour BiereCommande
 app.get('/biereCommande', async (req, res) => {
   try {
     const biereCommande = await biereCSchema.findAll();
-    res.json(bieres);
+    res.json(biereCommande);
   } catch (error) {
     res.status(500).send(error.message);
   }
@@ -119,13 +120,12 @@ app.get('/biereCommande', async (req, res) => {
 
 app.post('/biereCommande', async (req, res) => {
   try {
-    const biereCommandes = await biereCSchema.create(req.body);
-    res.json(biere);
+    const biereCommande = await biereCSchema.create(req.body);
+    res.json(biereCommande);
   } catch (error) {
     res.status(500).send(error.message);
   }
 });
-
 
 // Démarrer le serveur
 const PORT = process.env.PORT || 3000;
