@@ -1,15 +1,27 @@
-// models/Bar.js
-const { Sequelize, DataTypes } = require('sequelize');
-const sequelize = new Sequelize({
-  dialect: 'sqlite',
-  storage: './database.sqlite'
-});
-
-const Bar = sequelize.define('Bar', {
-  name: {
-    type: DataTypes.STRING,
-    allowNull: false
+'use strict';
+const {
+  Model
+} = require('sequelize');
+module.exports = (sequelize, DataTypes) => {
+  class Bar extends Model {
+    /**
+     * Helper method for defining associations.
+     * This method is not a part of Sequelize lifecycle.
+     * The `models/index` file will call this method automatically.
+     */
+    static associate(models) {
+      // define association here
+    }
   }
-});
-
-module.exports = Bar;
+  Bar.init({
+    name: DataTypes.STRING,
+    address: DataTypes.STRING,
+    tel: DataTypes.STRING,
+    email: DataTypes.STRING,
+    description: DataTypes.TEXT
+  }, {
+    sequelize,
+    modelName: 'Bar',
+  });
+  return Bar;
+};
