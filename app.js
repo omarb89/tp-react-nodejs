@@ -1,6 +1,8 @@
 const express = require('express');
 const barSchema = require('./models/bars.js');
 const biereSchema = require('./models/Bieres');
+const commandeSchema = require('./models/Commandes.js');
+const biereCSchema = require ('./models/BiereCommandes.js')
 
 const app = express();
 app.use(express.json());
@@ -79,7 +81,7 @@ app.post('/bieres', async (req, res) => {
 // Routes pour Commande
 app.get('/commandes', async (req, res) => {
   try {
-    const commandes = await Commande.findAll();
+    const commandes = await commandeSchema.findAll();
     res.json(commandes);
   } catch (error) {
     res.status(500).send(error.message);
@@ -88,7 +90,7 @@ app.get('/commandes', async (req, res) => {
 
 app.post('/commandes', async (req, res) => {
   try {
-    const commande = await Commande.create(req.body);
+    const commande = await commandeSchema.create(req.body);
     res.json(commande);
   } catch (error) {
     res.status(500).send(error.message);
@@ -106,18 +108,18 @@ app.post('/commandes/:commandeId/bieres', async (req, res) => {
   }
 });
 // Routes pour Biere commande
-app.get('/bieresCommande', async (req, res) => {
+app.get('/biereCommande', async (req, res) => {
   try {
-    const bieres = await biereCommandeSchema.findAll();
+    const biereCommande = await biereCSchema.findAll();
     res.json(bieres);
   } catch (error) {
     res.status(500).send(error.message);
   }
 });
 
-app.post('/bieresCommande', async (req, res) => {
+app.post('/biereCommande', async (req, res) => {
   try {
-    const biere = await bCSchema.create(req.body);
+    const biereCommandes = await biereCSchema.create(req.body);
     res.json(biere);
   } catch (error) {
     res.status(500).send(error.message);

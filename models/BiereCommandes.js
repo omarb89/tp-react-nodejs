@@ -1,7 +1,7 @@
 const db = require('../config/database');
 const sequelize = require('sequelize');
 
-const bCSchema = db.define('biereCommande', {
+const biereCSchema = db.define('biereCommande', {
   name: { type: sequelize.STRING },
   status: { type: sequelize.STRING, },
   Date: { type: sequelize.DATE},
@@ -9,4 +9,4 @@ const bCSchema = db.define('biereCommande', {
   bar_id: { type: sequelize.INTEGER,  },
 });
 
-module.exports = bCSchema
+module.exports = biereCSchema
