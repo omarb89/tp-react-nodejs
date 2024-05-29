@@ -58,6 +58,29 @@ app.delete('/bars/:id', async (req, res) => {
     res.status(500).send(error.message);
   }
 });
+app.put('/bars/:id', async (req, res) => {
+  try {
+      const id = req.params.id;
+      console.log(`Received ID: ${id}`); // Log de l'ID reçu
+
+      const bar = await barSchema.findByPk(id);
+      if (bar) {
+          console.log(`Found bar: ${JSON.stringify(bar)}`); // Log de l'objet trouvé
+
+          await bar.update(req.body);
+          const updatedBar = await barSchema.findByPk(id); // Récupérer l'objet mis à jour
+          res.json(updatedBar); // Renvoi de l'instance mise à jour
+      } else {
+          console.log('Product not found'); // Log si l'objet n'est pas trouvé
+          res.status(404).json({ error: 'Product not found' });
+      }
+  } catch (err) {
+      console.log(`Error: ${err.message}`); // Log de l'erreur
+      res.status(500).json({ error: err.message });
+  }
+});
+
+
 
 // Routes pour Biere
 app.get('/bieres', async (req, res) => {
