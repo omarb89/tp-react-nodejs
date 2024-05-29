@@ -16,6 +16,7 @@ router.post('/', async (req, res) => {
     const bar = await Bar.create(req.body);
     res.json(bar);
   } catch (error) {
+    console.log("test");
     res.status(500).json({ error: error.message });
   }
 });

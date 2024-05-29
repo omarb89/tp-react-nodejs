@@ -67,14 +67,10 @@ app.use('/beer_orders', beerOrderRouter);
 
 // Sync database and start server
 sequelize
-  .sync({ force: true })
+  // .sync({ force: true })
+  .sync()
   .then(async () => {
-    console.log('✅ Database & tables created!');
-    const barCount = await Bar.count();
-    if (barCount === 0) {
-      console.log('No bars found, seeding database...');
-      await seedDatabase();
-    }
+    console.log('✅ Database & tables created!')
   })
   .catch((err) => {
     console.error('Unable to connect to the database:', err);
