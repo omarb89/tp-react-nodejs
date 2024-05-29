@@ -1,29 +1,67 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 
 const AddBarForm = ({ addBar }) => {
   const [name, setName] = useState('');
+  const [adresse, setAdresse] = useState('');
+  const [tel, setTel] = useState('');
+  const [email, setEmail] = useState('');
   const [description, setDescription] = useState('');
+  const [message, setMessage] = useState('');
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const newBar = { name, description };
-    fetch('http://localhost:3000/api/bars', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(newBar)
-    })
-      .then(response => response.json())
-      .then(data => addBar(data));
+  const handleAddBar = async () => {
+    const newBar = { name, adresse, tel, email, description };
+    try {
+      const response = await axios.post('/api/bars', newBar);
+      if (response.status === 200) {
+        // Mettre à jour l'état parent avec le nouveau bar ajouté
+        addBar(response.data);
+        // Réinitialiser les champs après l'ajout
+        setName('');
+        setAdresse('');
+        setTel('');
+        setEmail('');
+        setDescription('');
+        // Afficher le message de confirmation
+        setMessage('Le bar a été ajouté avec succès !');
+        // Effacer le message après quelques secondes
+        setTimeout(() => {
+          setMessage('');
+        }, 3000);
+      } else {
+        throw new Error('Failed to add bar');
+      }
+    } catch (error) {
+      console.error('Error adding bar:', error);
+    }
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <div>
       <input
         type="text"
-        placeholder="Bar Name"
+        placeholder="Nom du bar"
         value={name}
         onChange={(e) => setName(e.target.value)}
         required
+      />
+      <input
+        type="text"
+        placeholder="Adresse"
+        value={adresse}
+        onChange={(e) => setAdresse(e.target.value)}
+      />
+      <input
+        type="text"
+        placeholder="Téléphone"
+        value={tel}
+        onChange={(e) => setTel(e.target.value)}
+      />
+      <input
+        type="email"
+        placeholder="Email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
       />
       <input
         type="text"
@@ -31,8 +69,9 @@ const AddBarForm = ({ addBar }) => {
         value={description}
         onChange={(e) => setDescription(e.target.value)}
       />
-      <button type="submit">Add Bar</button>
-    </form>
+      <button type="button" onClick={handleAddBar}>Ajouter le bar</button>
+      {message && <p>{message}</p>}
+    </div>
   );
 };
 

@@ -1,16 +1,43 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { getBar, deleteBar } from '../service/barService.js';
+import { deleteOrder } from '../service/orderService.js';
 
-const BarDetail = ({ bar, deleteBar }) => {
-  const handleDelete = () => {
-    fetch(`http://localhost:3000/api/bars/${bar.id}`, { method: 'DELETE' })
-      .then(() => deleteBar(bar.id));
+const BarDetail = () => {
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const [bar, setBar] = useState(null);
+
+  useEffect(() => {
+    getBar(id).then(response => setBar(response.data));
+  }, [id]);
+
+  const handleDeleteBar = () => {
+    deleteBar(id).then(() => navigate('/'));
   };
 
+  const handleDeleteOrder = (orderId) => {
+    deleteOrder(orderId).then(() => {
+      setBar({ ...bar, orders: bar.orders.filter(order => order.id !== orderId) });
+    });
+  };
+
+  if (!bar) return <div>Loading...</div>;
+
   return (
-    <div className="bar-detail">
-      <h2>{bar.name}</h2>
+    <div>
+      <h1>{bar.name}</h1>
       <p>{bar.description}</p>
-      <button onClick={handleDelete}>Delete Bar</button>
+      <button onClick={handleDeleteBar}>Delete Bar</button>
+      <h2>Orders</h2>
+      <ul>
+        {bar.orders.map(order => (
+          <li key={order.id}>
+            {order.name} - {order.status}
+            <button onClick={() => handleDeleteOrder(order.id)}>Cancel Order</button>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 };

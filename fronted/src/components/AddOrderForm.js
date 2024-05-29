@@ -1,56 +1,47 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { createOrder } from '../service/orderService.js';
+import { getBars } from '../service/barService.js';
 
-const AddOrderForm = () => {
-  const [barId, setBarId] = useState('');
-  const [beerId, setBeerId] = useState('');
+const OrderForm = () => {
   const [name, setName] = useState('');
-  const [prix, setPrix] = useState('');
+  const [prix, setPrix] = useState(0);
+  const [barId, setBarId] = useState('');
+  const [bars, setBars] = useState([]);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    getBars().then(response => setBars(response.data));
+  }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const newOrder = { barId, beerId, name, prix };
-    fetch('http://localhost:3000/api/orders', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(newOrder)
-    })
-      .then(response => response.json())
-      .then(data => console.log(data));
+    const order = { name, prix, barId };
+    createOrder(order).then(() => navigate('/'));
   };
 
   return (
     <form onSubmit={handleSubmit}>
-      <input
-        type="text"
-        placeholder="Bar ID"
-        value={barId}
-        onChange={(e) => setBarId(e.target.value)}
-        required
-      />
-      <input
-        type="text"
-        placeholder="Beer ID"
-        value={beerId}
-        onChange={(e) => setBeerId(e.target.value)}
-        required
-      />
-      <input
-        type="text"
-        placeholder="Order Name"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-        required
-      />
-      <input
-        type="text"
-        placeholder="Price"
-        value={prix}
-        onChange={(e) => setPrix(e.target.value)}
-        required
-      />
-      <button type="submit">Create Order</button>
+      <div>
+        <label>Name:</label>
+        <input type="text" value={name} onChange={(e) => setName(e.target.value)} required />
+      </div>
+      <div>
+        <label>Prix:</label>
+        <input type="number" value={prix} onChange={(e) => setPrix(e.target.value)} required />
+      </div>
+      <div>
+        <label>Bar:</label>
+        <select value={barId} onChange={(e) => setBarId(e.target.value)} required>
+          <option value="">Select Bar</option>
+          {bars.map(bar => (
+            <option key={bar.id} value={bar.id}>{bar.name}</option>
+          ))}
+        </select>
+      </div>
+      <button type="submit">Add Order</button>
     </form>
   );
 };
 
-export default AddOrderForm;
+export default OrderForm;
