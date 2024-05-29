@@ -1,4 +1,4 @@
-const db = require('../config/database');
+const db = require('../backend/config/database');
 const sequelize = require('sequelize');
 
 const commandeSchema = db.define('commandes', {
