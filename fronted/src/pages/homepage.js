@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import BarList from '../components/BarList.js';
 import OrderForm from '../components/orderForm.js';
-import AddBarForm from '../components/addBarForm.js';
+// import NavBar from '../components/Navbar.js';
 
 const HomePage = () => {
   const [bars, setBars] = useState([]);
@@ -31,6 +31,9 @@ const HomePage = () => {
     <div>
       <h1>Home Page</h1>
       {error && <p>Une erreur s'est produite : {error.message}</p>}
+      <BarList />
+      
+      {/* <OrderForm /> */}
       <h2>Liste des bars :</h2>
       <table>
         <thead>
@@ -54,8 +57,12 @@ const HomePage = () => {
           ))}
         </tbody>
       </table>
-
+      
+      
+      
     </div>
+    
+    
   );
 };
 

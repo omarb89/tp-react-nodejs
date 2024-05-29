@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { getBar, deleteBar } from '../service/barService.js';
-import { deleteOrder } from '../service/orderService.js';
+import axios from 'axios';
 
 const BarDetail = () => {
   const { id } = useParams();
@@ -9,17 +8,37 @@ const BarDetail = () => {
   const [bar, setBar] = useState(null);
 
   useEffect(() => {
-    getBar(id).then(response => setBar(response.data));
+    const fetchBar = async () => {
+      try {
+        const response = await axios.get(`http://localhost:5000/bars/:id`);
+        setBar(response.data);
+      } catch (error) {
+        console.error('Error fetching bar:', error);
+      }
+    };
+
+    fetchBar();
   }, [id]);
 
-  const handleDeleteBar = () => {
-    deleteBar(id).then(() => navigate('/'));
+  const handleDeleteBar = async () => {
+    try {
+      await axios.delete(`http://localhost:5000/bars/:id`);
+      navigate('/');
+    } catch (error) {
+      console.error('Error deleting bar:', error);
+    }
   };
 
-  const handleDeleteOrder = (orderId) => {
-    deleteOrder(orderId).then(() => {
-      setBar({ ...bar, orders: bar.orders.filter(order => order.id !== orderId) });
-    });
+  const handleDeleteOrder = async (orderId) => {
+    try {
+      await axios.delete(`http://localhost:5000/orders/${orderId}`);
+      setBar(prevBar => ({
+        ...prevBar,
+        orders: prevBar.orders.filter(order => order.id !== orderId)
+      }));
+    } catch (error) {
+      console.error('Error deleting order:', error);
+    }
   };
 
   if (!bar) return <div>Loading...</div>;

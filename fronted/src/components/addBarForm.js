@@ -12,7 +12,7 @@ const AddBarForm = ({ addBar }) => {
   const handleAddBar = async () => {
     const newBar = { name, adresse, tel, email, description };
     try {
-      const response = await axios.post('/api/bars', newBar);
+      const response = await axios.post('http://localhost:5000/bars', newBar); // Envoyer la requête POST à http://localhost:5000/bars
       if (response.status === 200) {
         // Mettre à jour l'état parent avec le nouveau bar ajouté
         addBar(response.data);

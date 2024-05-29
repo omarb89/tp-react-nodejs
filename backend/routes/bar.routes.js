@@ -41,9 +41,7 @@ router.delete('/:id', async (req, res) => {
 
 router.get('/:id', async (req, res) => {
   try {
-    const bar = await Bar.findByPk(req.params.id, {
-      include: ['beers', 'orders']
-    });
+    const bar = await Bar.findByPk(req.params.id);
     res.json(bar);
   } catch (error) {
     res.status(500).json({ error: error.message });

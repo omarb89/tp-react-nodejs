@@ -1,5 +1,7 @@
 import { DataTypes } from 'sequelize';
 import sequelize from '../config/database.js';
+import Beer from './beer.model.js'; // Assurez-vous d'importer le modèle Beer
+import Order from './order.model.js'; // Assurez-vous d'importer le modèle Order
 
 const Bar = sequelize.define('Bar', {
   name: {
@@ -20,5 +22,9 @@ const Bar = sequelize.define('Bar', {
     type: DataTypes.TEXT
   }
 });
+
+// Définition des associations
+Bar.hasMany(Beer, { as: 'beers' }); // Un bar peut avoir plusieurs bières
+Bar.hasMany(Order, { as: 'orders' }); // Un bar peut avoir plusieurs commandes
 
 export default Bar;
