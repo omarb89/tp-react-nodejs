@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import BarList from '../components/BarList.js';
+import BarDetail from '../components/BarDetails.js';
 import OrderForm from '../components/orderForm.js';
 // import NavBar from '../components/Navbar.js';
 
