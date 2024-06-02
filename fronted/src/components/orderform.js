@@ -23,7 +23,7 @@ const OrderForm = () => {
   return (
     <form onSubmit={handleSubmit}>
       <div>
-        <label>Name:</label>
+        <label>Nom:</label>
         <input type="text" value={name} onChange={(e) => setName(e.target.value)} required />
       </div>
       <div>
@@ -33,13 +33,13 @@ const OrderForm = () => {
       <div>
         <label>Bar:</label>
         <select value={barId} onChange={(e) => setBarId(e.target.value)} required>
-          <option value="">Select Bar</option>
+          <option value="">Sélectionner un bar</option>
           {bars.map(bar => (
             <option key={bar.id} value={bar.id}>{bar.name}</option>
           ))}
         </select>
       </div>
-      <button type="submit">Add Order</button>
+      <button type="submit">Ajouter la commande</button>
     </form>
   );
 };

@@ -1,26 +1,34 @@
 import { DataTypes } from 'sequelize';
 import sequelize from '../config/database.js';
+import Beer from './beer.model.js';
+import Order from './order.model.js';
 
-const Beer = sequelize.define('Beer', {
-  name: {
-    type: DataTypes.STRING,
-    allowNull: false
-  },
-  description: {
-    type: DataTypes.TEXT
-  },
-  degree: {
-    type: DataTypes.FLOAT
-  },
-  prix: {
-    type: DataTypes.FLOAT,
-    allowNull: false,
-    validate: { min: 0 }
-  },
-  barId: {
+const BeerOrder = sequelize.define('BeerOrder', {
+  beerId: {
     type: DataTypes.INTEGER,
+    allowNull: false,
+    references: {
+      model: Beer,
+      key: 'id'
+    }
+  },
+  orderId: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    references: {
+      model: Order,
+      key: 'id'
+    }
+  },
+  quantity: {
+    type: DataTypes.INTEGER,
+    defaultValue: 1,
     allowNull: false
   }
 });
 
-export default Beer;
+// Définir les relations
+Beer.belongsToMany(Order, { through: BeerOrder });
+Order.belongsToMany(Beer, { through: BeerOrder });
+
+export default BeerOrder;

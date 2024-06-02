@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { getBars } from '../service/barService.js';
+import { getBars, deleteBar } from '../service/barService';
+import { Button, Card, Container, Row, Col } from 'react-bootstrap';
 
 const BarList = () => {
   const [bars, setBars] = useState([]);
@@ -9,18 +10,39 @@ const BarList = () => {
     getBars().then(response => setBars(response.data));
   }, []);
 
+  const handleDelete = (barId) => {
+    deleteBar(barId).then(() => {
+      setBars(bars.filter(bar => bar.id !== barId));
+    });
+  };
+
   return (
-    <div>
-      <h1>Bars</h1>
-      <Link to="/add-bar">Add Bar</Link>
-      <ul>
+    <Container>
+      <Row className="my-4">
+        <Col>
+          <h1>Bars</h1>
+          <Button variant="primary" as={Link} to="/add-bar">Ajouter un bar</Button>
+        </Col>
+      </Row>
+      <Row>
         {bars.map(bar => (
-          <li key={bar.id}>
-            <Link to={`/bars/${bar.id}`}>{bar.name}</Link>
-          </li>
+          <Col key={bar.id} sm={12} md={6} lg={4} className="mb-4">
+            <Card>
+              <Card.Body>
+                <Card.Title>{bar.name}</Card.Title>
+                <Card.Text>
+                  {bar.description}
+                </Card.Text>
+                <div className="d-flex justify-content-between">
+                  <Button variant="primary" as={Link} to={`/bars/${bar.id}`}>Détails</Button>
+                  <Button variant="danger" size="sm" onClick={() => handleDelete(bar.id)}>Supprimer</Button>
+                </div>
+              </Card.Body>
+            </Card>
+          </Col>
         ))}
-      </ul>
-    </div>
+      </Row>
+    </Container>
   );
 };
 

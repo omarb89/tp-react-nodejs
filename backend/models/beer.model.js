@@ -1,15 +1,26 @@
 import { DataTypes } from 'sequelize';
 import sequelize from '../config/database.js';
 
-const BeerOrder = sequelize.define('BeerOrder', {
-  beerId: {
-    type: DataTypes.INTEGER,
+const Beer = sequelize.define('Beer', {
+  name: {
+    type: DataTypes.STRING,
     allowNull: false
   },
-  orderId: {
+  description: {
+    type: DataTypes.TEXT
+  },
+  degree: {
+    type: DataTypes.FLOAT
+  },
+  prix: {
+    type: DataTypes.FLOAT,
+    allowNull: false,
+    validate: { min: 0 }
+  },
+  barId: {
     type: DataTypes.INTEGER,
     allowNull: false
   }
 });
 
-export default BeerOrder;
+export default Beer;

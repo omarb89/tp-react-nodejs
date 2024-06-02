@@ -3,25 +3,20 @@ const router = express.Router();
 import BeerOrder from '../models/beer_order.model.js';
 
 // Ajouter une bière à une commande
-router.post('/orders/:orderId/beers/:beerId', async (req, res) => {
+router.post('/orders', async (req, res) => {
   try {
-    const { orderId, beerId } = req.params;
-    const beerOrder = await BeerOrder.create({ orderId, beerId });
+    const { barId, beerId, quantity } = req.body;
+    console.log('Received Order:', { barId, beerId, quantity });  // Log de debug
+
+    if (!barId || !beerId || !quantity) {
+      throw new Error('Missing required fields');
+    }
+
+    const beerOrder = await BeerOrder.create({ barId, beerId, quantity });
+    console.log('Order created successfully:', beerOrder);  // Log de succès
     res.json(beerOrder);
   } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
-
-// Supprimer une bière d'une commande
-router.delete('/orders/:orderId/beers/:beerId', async (req, res) => {
-  try {
-    const { orderId, beerId } = req.params;
-    await BeerOrder.destroy({
-      where: { orderId, beerId }
-    });
-    res.sendStatus(204);
-  } catch (error) {
+    console.error('Error creating order:', error);  // Log d'erreur détaillé
     res.status(500).json({ error: error.message });
   }
 });

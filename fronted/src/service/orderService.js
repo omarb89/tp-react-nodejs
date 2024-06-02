@@ -1,6 +1,14 @@
+// src/service/orderService.js
 import axios from 'axios';
 
-const API_URL = 'http://localhost:5000/orders';
+export const addBeerToOrder = (barId, beerId, quantity) => {
+  return axios.post('http://localhost:5000/orders', { barId, beerId, quantity });
+};
 
-export const createOrder = (order) => axios.post(API_URL, order);
-export const deleteOrder = (id) => axios.delete(`${API_URL}/${id}`);
+export const getOrdersByBar = (barId) => {
+  return axios.get(`http://localhost:5000/orders?barId=${barId}`);
+};
+
+export const deleteOrder = (orderId) => {
+  return axios.delete(`http://localhost:5000/orders/${orderId}`);
+};

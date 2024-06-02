@@ -1,12 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { Container, Table, Alert } from 'react-bootstrap';
 import BarList from '../components/BarList.js';
-import BarDetail from '../components/BarDetails.js';
-import OrderForm from '../components/orderForm.js';
+import BeerList from '../components/BeerList.js';
+import BeerForm from '../components/BeerForm.js';
+// import BarDetail from '../components/BarDetails.js';
+// import OrderForm from '../components/orderform.js';
 // import NavBar from '../components/Navbar.js';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const HomePage = () => {
   const [bars, setBars] = useState([]);
+  const [beers, setBeers] = useState([]);
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -29,15 +34,16 @@ const HomePage = () => {
   }, []);
 
   return (
-    <div>
-      <h1>Home Page</h1>
-      {error && <p>Une erreur s'est produite : {error.message}</p>}
+    <Container>
+      {/* <h1 className="my-4">Home Page</h1> */}
+      {error && <Alert variant="danger">Une erreur s'est produite : {error.message}</Alert>}
       <BarList />
+      <BeerList />
       
       {/* <OrderForm /> */}
-      <h2>Liste des bars :</h2>
-      <table>
-        <thead>
+      {/* <h2 className="my-4">Liste des bars :</h2> */}
+      <Table striped bordered hover>
+        {/* <thead>
           <tr>
             <th>Nom</th>
             <th>Adresse</th>
@@ -45,8 +51,8 @@ const HomePage = () => {
             <th>Email</th>
             <th>Description</th>
           </tr>
-        </thead>
-        <tbody>
+        </thead> */}
+        {/* <tbody>
           {bars.map((bar) => (
             <tr key={bar.id}>
               <td>{bar.name}</td>
@@ -56,14 +62,9 @@ const HomePage = () => {
               <td>{bar.description}</td>
             </tr>
           ))}
-        </tbody>
-      </table>
-      
-      
-      
-    </div>
-    
-    
+        </tbody> */}
+      </Table>
+    </Container>
   );
 };
 

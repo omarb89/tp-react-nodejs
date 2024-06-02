@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { Form, Button, Alert, Container } from 'react-bootstrap';
 
 const AddBarForm = ({ addBar }) => {
   const [name, setName] = useState('');
@@ -12,19 +13,15 @@ const AddBarForm = ({ addBar }) => {
   const handleAddBar = async () => {
     const newBar = { name, adresse, tel, email, description };
     try {
-      const response = await axios.post('http://localhost:5000/bars', newBar); // Envoyer la requête POST à http://localhost:5000/bars
+      const response = await axios.post('http://localhost:5000/bars', newBar);
       if (response.status === 200) {
-        // Mettre à jour l'état parent avec le nouveau bar ajouté
         addBar(response.data);
-        // Réinitialiser les champs après l'ajout
         setName('');
         setAdresse('');
         setTel('');
         setEmail('');
         setDescription('');
-        // Afficher le message de confirmation
         setMessage('Le bar a été ajouté avec succès !');
-        // Effacer le message après quelques secondes
         setTimeout(() => {
           setMessage('');
         }, 3000);
@@ -33,45 +30,69 @@ const AddBarForm = ({ addBar }) => {
       }
     } catch (error) {
       console.error('Error adding bar:', error);
+      setMessage('Une erreur est survenue lors de l\'ajout du bar.');
     }
   };
 
   return (
-    <div>
-      <input
-        type="text"
-        placeholder="Nom du bar"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-        required
-      />
-      <input
-        type="text"
-        placeholder="Adresse"
-        value={adresse}
-        onChange={(e) => setAdresse(e.target.value)}
-      />
-      <input
-        type="text"
-        placeholder="Téléphone"
-        value={tel}
-        onChange={(e) => setTel(e.target.value)}
-      />
-      <input
-        type="email"
-        placeholder="Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
-      <input
-        type="text"
-        placeholder="Description"
-        value={description}
-        onChange={(e) => setDescription(e.target.value)}
-      />
-      <button type="button" onClick={handleAddBar}>Ajouter le bar</button>
-      {message && <p>{message}</p>}
-    </div>
+    <Container>
+      <h2>Ajouter un Nouveau Bar</h2>
+      <Form>
+        <Form.Group controlId="formBarName">
+          <Form.Label>Nom du bar</Form.Label>
+          <Form.Control
+            type="text"
+            placeholder="Nom du bar"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+          />
+        </Form.Group>
+
+        <Form.Group controlId="formBarAdresse">
+          <Form.Label>Adresse</Form.Label>
+          <Form.Control
+            type="text"
+            placeholder="Adresse"
+            value={adresse}
+            onChange={(e) => setAdresse(e.target.value)}
+          />
+        </Form.Group>
+
+        <Form.Group controlId="formBarTel">
+          <Form.Label>Téléphone</Form.Label>
+          <Form.Control
+            type="text"
+            placeholder="Téléphone"
+            value={tel}
+            onChange={(e) => setTel(e.target.value)}
+          />
+        </Form.Group>
+
+        <Form.Group controlId="formBarEmail">
+          <Form.Label>Email</Form.Label>
+          <Form.Control
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+        </Form.Group>
+
+        <Form.Group controlId="formBarDescription">
+          <Form.Label>Description</Form.Label>
+          <Form.Control
+            type="text"
+            placeholder="Description"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+          />
+        </Form.Group>
+
+        <Button variant="primary" onClick={handleAddBar}>Ajouter le bar</Button>
+      </Form>
+      {message && <Alert variant={message.includes('succès') ? 'success' : 'danger'} className="mt-3">{message}</Alert>}
+    </Container>
   );
 };
 
